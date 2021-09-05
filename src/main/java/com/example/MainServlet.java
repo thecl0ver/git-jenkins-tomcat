@@ -19,6 +19,6 @@ public class MainServlet extends HttpServlet {
                 })
                 .collect(Collectors.joining("\n"));
 
-        resp.getWriter().write("Method doGet\n" + "\nParms:\n" + parms);
+        resp.getWriter().write("Method doGet\n" + "\nParmsssssss:\n" + parms);
     }
 }
