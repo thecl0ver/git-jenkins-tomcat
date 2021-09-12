@@ -3,10 +3,6 @@ package com.example.jenkins.commands;
 import com.example.jenkins.dao.UserDao;
 import com.example.jenkins.entity.User;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Map;
 
 public class UpdateCommand extends Command{
@@ -16,10 +12,8 @@ public class UpdateCommand extends Command{
     }
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) {
-        Map<String, String[]> paramMap = req.getParameterMap();
-
-        userDao.update(getUser(paramMap));
+    public int execute(Map<String, String[]> map) {
+        return userDao.update(getUser(map));
     }
 
     private User getUser(Map<String,String[]> paramMap) {

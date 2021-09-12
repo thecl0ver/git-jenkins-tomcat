@@ -2,10 +2,7 @@ package com.example.jenkins.commands;
 
 import com.example.jenkins.dao.UserDao;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.util.Map;
 
 public abstract class Command {
     protected String name;
@@ -20,5 +17,5 @@ public abstract class Command {
         return name;
     }
 
-    public abstract void execute(HttpServletRequest req, HttpServletResponse resp);
+    public abstract int execute(Map<String, String[]> map);
 }

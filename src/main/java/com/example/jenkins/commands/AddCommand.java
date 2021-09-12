@@ -3,8 +3,6 @@ package com.example.jenkins.commands;
 import com.example.jenkins.dao.UserDao;
 import com.example.jenkins.entity.User;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public class AddCommand extends Command{
@@ -15,10 +13,8 @@ public class AddCommand extends Command{
     }
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) {
-        Map<String, String[]> paramMap = req.getParameterMap();
-
-        userDao.add(getUser(paramMap));
+    public int execute(Map<String, String[]> map) {
+        return userDao.add(getUser(map));
     }
 
     private User getUser(Map<String,String[]> paramMap) {
@@ -36,4 +32,5 @@ public class AddCommand extends Command{
     private String getParamValue(String[] params) {
         return params[0];
     }
+
 }
