@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Main page</h1>
+<br/>
+<form method="post" action="/sweater/jenkins">
+    <input name="login" placeholder="login"> login can not be changed<br>
+    <input name="name" placeholder="name">
+    <br/>
+    <input name="surname" placeholder="surname">
+    <br/>
+    <input name="age" placeholder="age">
+    <br/>
+    <input name="email" placeholder="email">
+    <p>
+        <label for="action">Choose action:</label>
+        <select id="action" name="action">
+            <option value="add">add</option>
+            <option value="update">update</option>
+            <option value="delete">delete</option>
+        </select>
+    </p>
+    <button type="submit">Send</button>
+
+</form>
+
+</body>
+</html>

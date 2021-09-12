@@ -1,0 +1,10 @@
+com/example/jenkins/MainServlet.class
+com/example/jenkins/commands/Command.class
+com/example/jenkins/service/ApplicationPropertiesReader.class
+com/example/jenkins/commands/UpdateCommand.class
+com/example/jenkins/commands/GetAllCommand.class
+com/example/jenkins/commands/DeleteCommand.class
+com/example/jenkins/entity/User.class
+com/example/jenkins/dao/UserDao.class
+com/example/jenkins/dao/Dao.class
+com/example/jenkins/commands/AddCommand.class
