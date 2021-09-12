@@ -5,13 +5,13 @@ import java.util.HashSet;
 
 public interface Dao<T, PK> {
 
-    void add(T entity) throws SQLException;
+    int add(T entity) throws SQLException;
 
     HashSet<T> getAll();
 
     T getByLogin(String login);
 
-    void update(T entity);
+    int update(T entity);
 
-    void deleteByLogin(String login);
+    int deleteByLogin(String login);
 }

@@ -1,19 +1,31 @@
 package com.example.jenkins.dao;
 
 import com.example.jenkins.entity.User;
+import com.example.jenkins.service.ApplicationPropertiesReader;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 
 public class UserDao implements Dao<User, Integer> {
-    private Connection connection;
+    private static Connection connection;
 
-    public UserDao(Connection connection) {
-        this.connection = connection;
+    static {
+        try {
+            Class.forName(ApplicationPropertiesReader.getProperty("driver.name"));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            connection =
+                    DriverManager.getConnection(ApplicationPropertiesReader.getProperty("db.url"),
+                            ApplicationPropertiesReader.getProperty("db.user"),
+                            ApplicationPropertiesReader.getProperty("db.password"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-
-
 
     /*public static void createTable(){
         // строка sql запроса
@@ -45,13 +57,13 @@ public class UserDao implements Dao<User, Integer> {
         }
     }*/
 
-
     @Override
-    public void add(User entity) {
+    public int add(User entity) {
         String insertSql = "INSERT INTO tb_user(login, name, surname, age, email, creation_date) VALUES(?, ?, ?, ?, ?, ?)";
+        int result = 0;
 
         if (entity.getLogin().equals(getByLogin(entity.getLogin()).getLogin())) {
-            return;
+            return result;
         }
 
         try {
@@ -63,14 +75,14 @@ public class UserDao implements Dao<User, Integer> {
                 statement.setInt(4, entity.getAge());
                 statement.setString(5, entity.getEmail());
                 statement.setObject(6, LocalDateTime.now());
-                statement.executeUpdate();
 
+                result = statement.executeUpdate();
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-
+        return result;
     }
 
     @Override
@@ -121,6 +133,7 @@ public class UserDao implements Dao<User, Integer> {
                 user.setEmail(result.getString("email"));
                 user.setCreationDate(result.getObject("creation_date", LocalDateTime.class));
                 user.setLastUpdateDate(result.getObject("last_update_date", LocalDateTime.class));
+                user.setDeleted(result.getBoolean("isdeleted"));
             }
             result.close();
 
@@ -132,12 +145,13 @@ public class UserDao implements Dao<User, Integer> {
     }
 
     @Override
-    public void update(User entity) {
+    public int update(User entity) {
         String updateSql = "UPDATE tb_user SET name = ?, surname = ?, age = ?, email = ?, last_update_date = ? WHERE login = ?";
+        int result = 0;
 
         User user = getByLogin(entity.getLogin());
         if (user.isDeleted()) {
-            return;
+            return result;
         }
 
         try (PreparedStatement statement = connection.prepareStatement(updateSql)) {
@@ -147,30 +161,34 @@ public class UserDao implements Dao<User, Integer> {
             statement.setString(4, entity.getEmail());
             statement.setObject(5, LocalDateTime.now());
             statement.setString(6, entity.getLogin());
-            statement.executeUpdate();
+
+            result = statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return result;
     }
 
     @Override
-    public void deleteByLogin(String login) {
+    public int deleteByLogin(String login) {
         String deleteSql = "UPDATE tb_user SET isdeleted = ? WHERE login = ?";
+        int result = 0;
 
         User user = getByLogin(login);
         if (user.isDeleted()) {
-            return;
+            return result;
         }
 
         try (PreparedStatement statement = connection.prepareStatement(deleteSql)) {
             statement.setBoolean(1, true);
             statement.setString(2, login);
-            statement.executeUpdate();
+
+            result = statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-
+        return result;
     }
 
     public void close() {
